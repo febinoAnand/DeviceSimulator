@@ -37,3 +37,7 @@ def monitor_device_simulations():
         if device.device_token in running_threads:
             running_threads[device.device_token].do_run = False
             del running_threads[device.device_token]
+
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    sender.add_periodic_task(10.0, monitor_device_simulations.s())
